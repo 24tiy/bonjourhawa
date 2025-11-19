@@ -5,7 +5,7 @@
   <title>Grinch Bonjour</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Немного мультяшного шрифта под гринч-стиль -->
+  <!-- Шрифты (Mountains of Christmas = гринчевский заголовок) -->
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
 
   <style>
@@ -31,10 +31,21 @@
       align-items: center;
       justify-content: center;
       font-family: "Fredoka", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #e6ffe9;
+      transition: background 0.6s ease;
+    }
+
+    /* Два варианта фона — зелёный и красный, будем переключать классами */
+    body.bg-green {
       background:
         radial-gradient(circle at top left, #082616 0, #02130a 40%, #000000 100%),
         radial-gradient(circle at bottom, #033018 0, #000000 70%);
-      color: #e6ffe9;
+    }
+
+    body.bg-red {
+      background:
+        radial-gradient(circle at top left, #3b0505 0, #190202 40%, #000000 100%),
+        radial-gradient(circle at bottom, #4c0505 0, #000000 70%);
     }
 
     .app {
@@ -51,16 +62,21 @@
       text-align: center;
       backdrop-filter: blur(8px);
       border: 1px solid rgba(84, 210, 89, 0.25);
+      transform: translate3d(0, 0, 0);
     }
 
-    .title {
-      font-family: "Mountains of Christmas", cursive;
-      font-size: 2.3rem;
-      color: var(--grinch-yellow);
-      text-shadow:
-        0 2px 0 #083015,
-        0 4px 8px rgba(0, 0, 0, 0.8);
-      margin-bottom: 6px;
+    /* Лёгкое дрожание "экрана" */
+    .app.shake {
+      animation: screen-shake 0.45s ease;
+    }
+
+    @keyframes screen-shake {
+      0%   { transform: translate(0, 0); }
+      20%  { transform: translate(-4px, 2px); }
+      40%  { transform: translate(3px, -3px); }
+      60%  { transform: translate(-3px, 1px); }
+      80%  { transform: translate(2px, -2px); }
+      100% { transform: translate(0, 0); }
     }
 
     .subtitle {
@@ -161,6 +177,14 @@
       transform: translateY(-1px);
     }
 
+    /* Надпись Bonjour Sasha в гринчевском шрифте */
+    .btn-label {
+      font-family: "Mountains of Christmas", cursive;
+      font-size: 1.5rem;
+      text-transform: none;
+      letter-spacing: 0.08em;
+    }
+
     .btn:hover {
       transform: translateY(-2px) scale(1.02);
       box-shadow:
@@ -181,7 +205,7 @@
       outline-offset: 4px;
     }
 
-    /* Падающие зелёные шерстяные локоны Гринча */
+    /* Падающие зелёные "шерстяные" локоны */
     .fur-strand {
       position: fixed;
       top: -15vh;
@@ -234,10 +258,6 @@
         padding: 24px 18px 20px;
       }
 
-      .title {
-        font-size: 2rem;
-      }
-
       .btn {
         width: 100%;
         padding-inline: 18px;
@@ -251,9 +271,8 @@
     }
   </style>
 </head>
-<body>
+<body class="bg-green">
   <div class="app">
-    <div class="title">Grinch Bonjour</div>
     <div class="subtitle">Appuie sur le bouton… si tu oses 💚</div>
 
     <!-- Блок с фото + "Bonjour Hawa" -->
@@ -273,28 +292,30 @@
     <!-- Кнопка -->
     <button id="bonjour-btn" class="btn">
       <span class="icon">💚</span>
-      <span>Bonjour Sasha</span>
+      <span class="btn-label">Bonjour Sasha</span>
       <span class="icon">💚</span>
     </button>
   </div>
 
   <script>
-    // Я подставил твой реальный RAW-URL с GitHub
+    // Твоя картинка с GitHub
     const IMG_URL = "https://raw.githubusercontent.com/24tiy/bonjourjade/bb4bad455cae2115cd54972c2b2cbf18a8deb836/camphoto_1401208270.JPG";
 
     const helloBlock = document.getElementById("hello-block");
     const helloImage = document.getElementById("hello-image");
     const btn = document.getElementById("bonjour-btn");
+    const app = document.querySelector(".app");
+    const bodyEl = document.body;
 
     helloImage.src = IMG_URL;
 
     let hideTimeoutId = null;
 
     btn.addEventListener("click", () => {
-      // Показать блок
+      // Показать блок с фото/текстом
       helloBlock.classList.add("visible");
 
-      // Сбросить старый таймер, если он был
+      // Сбросить старый таймер скрытия, если был
       if (hideTimeoutId !== null) {
         clearTimeout(hideTimeoutId);
         hideTimeoutId = null;
@@ -305,6 +326,21 @@
         helloBlock.classList.remove("visible");
         hideTimeoutId = null;
       }, 5000);
+
+      // Лёгкое дрожание "экрана"
+      app.classList.add("shake");
+      setTimeout(() => {
+        app.classList.remove("shake");
+      }, 450);
+
+      // Переключение фона: зелёный ↔ красный
+      if (bodyEl.classList.contains("bg-green")) {
+        bodyEl.classList.remove("bg-green");
+        bodyEl.classList.add("bg-red");
+      } else {
+        bodyEl.classList.remove("bg-red");
+        bodyEl.classList.add("bg-green");
+      }
     });
 
     // Генерация падающих зелёных "шерстяных" локонов
@@ -326,7 +362,7 @@
         const delay = Math.random() * 10;
         f.style.animationDelay = delay + "s";
 
-        // Чуть случайный размер/длина
+        // Случайный размер/длина
         const width = 3 + Math.random() * 3;
         const height = 16 + Math.random() * 18;
         f.style.width = width + "px";
