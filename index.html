@@ -2,19 +2,20 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Grinch Bonjour</title>
+  <title>Beer Bonjour</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Шрифты (Mountains of Christmas = гринчевский заголовок) -->
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
+  <!-- Шрифт в стиле паба -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Sigmar+One&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --grinch-green: #19a333;
-      --grinch-green-light: #54d259;
-      --grinch-green-dark: #0b4b1a;
-      --grinch-yellow: #ffe66d;
-      --card-bg: rgba(6, 32, 18, 0.95);
+      --beer-gold: #f4b024;
+      --beer-light: #ffd15a;
+      --beer-dark: #b86b22;
+      --foam: #fff7e6;
+      --foam-shadow: #f0e0c2;
+      --card-bg: rgba(35, 18, 5, 0.9);
       --white: #ffffff;
     }
 
@@ -31,21 +32,30 @@
       align-items: center;
       justify-content: center;
       font-family: "Fredoka", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: #e6ffe9;
-      transition: background 0.6s ease;
+      color: #fff9e6;
+      background:
+        linear-gradient(to bottom, #fffaf0 0, #ffe8b8 8%, #f4b024 22%, #e4931e 60%, #b6631e 100%);
+      position: relative;
     }
 
-    /* Два варианта фона — зелёный и красный, будем переключать классами */
-    body.bg-green {
+    /* Полоса пивной пены сверху */
+    .foam {
+      position: fixed;
+      top: -10px;
+      left: 0;
+      right: 0;
+      height: 110px;
       background:
-        radial-gradient(circle at top left, #082616 0, #02130a 40%, #000000 100%),
-        radial-gradient(circle at bottom, #033018 0, #000000 70%);
-    }
-
-    body.bg-red {
-      background:
-        radial-gradient(circle at top left, #3b0505 0, #190202 40%, #000000 100%),
-        radial-gradient(circle at bottom, #4c0505 0, #000000 70%);
+        radial-gradient(circle at 10% 40%, var(--foam) 0, transparent 60%),
+        radial-gradient(circle at 30% 20%, var(--foam) 0, transparent 60%),
+        radial-gradient(circle at 55% 35%, var(--foam) 0, transparent 60%),
+        radial-gradient(circle at 80% 25%, var(--foam) 0, transparent 60%),
+        radial-gradient(circle at 95% 50%, var(--foam) 0, transparent 60%),
+        linear-gradient(to bottom, var(--foam) 0, var(--foam-shadow) 100%);
+      box-shadow:
+        0 8px 14px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.8);
+      z-index: 0;
     }
 
     .app {
@@ -54,34 +64,19 @@
       max-width: 480px;
       width: 100%;
       padding: 28px 22px 24px;
-      border-radius: 22px;
+      border-radius: 24px;
       background: var(--card-bg);
       box-shadow:
         0 22px 40px rgba(0, 0, 0, 0.8),
-        0 0 0 2px rgba(25, 163, 51, 0.7);
+        0 0 0 2px rgba(255, 236, 184, 0.7);
       text-align: center;
       backdrop-filter: blur(8px);
-      border: 1px solid rgba(84, 210, 89, 0.25);
-      transform: translate3d(0, 0, 0);
-    }
-
-    /* Лёгкое дрожание "экрана" */
-    .app.shake {
-      animation: screen-shake 0.45s ease;
-    }
-
-    @keyframes screen-shake {
-      0%   { transform: translate(0, 0); }
-      20%  { transform: translate(-4px, 2px); }
-      40%  { transform: translate(3px, -3px); }
-      60%  { transform: translate(-3px, 1px); }
-      80%  { transform: translate(2px, -2px); }
-      100% { transform: translate(0, 0); }
+      border: 1px solid rgba(0, 0, 0, 0.6);
     }
 
     .subtitle {
-      font-size: 0.98rem;
-      color: #9fd9a8;
+      font-size: 1rem;
+      color: #ffe8b0;
       margin-bottom: 20px;
     }
 
@@ -113,10 +108,10 @@
       max-height: 260px;
       object-fit: cover;
       border-radius: 18px;
-      border: 3px solid var(--grinch-green-light);
+      border: 3px solid var(--beer-light);
       box-shadow:
         0 14px 26px rgba(0, 0, 0, 0.85),
-        0 0 16px rgba(25, 163, 51, 0.8);
+        0 0 14px rgba(255, 209, 90, 0.8);
     }
 
     .hello-image-glow {
@@ -125,29 +120,29 @@
       border-radius: 22px;
       background: conic-gradient(
         from 180deg,
-        rgba(84, 210, 89, 0.8),
-        rgba(25, 163, 51, 0.1),
-        rgba(255, 230, 109, 0.7),
-        rgba(11, 75, 26, 0.9),
-        rgba(84, 210, 89, 0.8)
+        rgba(255, 255, 255, 0.6),
+        rgba(255, 209, 90, 0.9),
+        rgba(180, 90, 20, 0.7),
+        rgba(255, 209, 90, 0.9),
+        rgba(255, 255, 255, 0.6)
       );
-      opacity: 0.4;
-      filter: blur(5px);
+      opacity: 0.35;
+      filter: blur(6px);
       z-index: -1;
     }
 
     .hello-text {
-      font-size: 1.9rem;
-      font-weight: 700;
+      font-size: 2rem;
+      font-weight: 800;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      color: var(--grinch-green-light);
+      color: #ffeac0;
       text-shadow:
-        0 2px 0 #041b0d,
+        0 2px 0 #5a2a0a,
         0 3px 6px rgba(0, 0, 0, 0.9);
     }
 
-    /* Кнопка Гринча */
+    /* Кнопка "пивная" */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -161,11 +156,11 @@
       text-transform: uppercase;
       letter-spacing: 0.14em;
       cursor: pointer;
-      background: linear-gradient(135deg, var(--grinch-green-light), var(--grinch-green-dark));
+      background: linear-gradient(135deg, var(--beer-light), var(--beer-dark));
       color: var(--white);
       box-shadow:
         0 18px 32px rgba(0, 0, 0, 0.9),
-        0 0 0 3px rgba(4, 27, 13, 1);
+        0 0 0 3px rgba(90, 40, 10, 1);
       transition:
         transform 0.12s ease,
         box-shadow 0.12s ease,
@@ -177,19 +172,19 @@
       transform: translateY(-1px);
     }
 
-    /* Надпись Bonjour Sasha в гринчевском шрифте */
+    /* Надпись Bonjour Sasha в "пивном" шрифте */
     .btn-label {
-      font-family: "Mountains of Christmas", cursive;
+      font-family: "Sigmar One", cursive;
       font-size: 1.5rem;
       text-transform: none;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
     }
 
     .btn:hover {
       transform: translateY(-2px) scale(1.02);
       box-shadow:
         0 22px 38px rgba(0, 0, 0, 1),
-        0 0 0 3px rgba(25, 163, 51, 0.9);
+        0 0 0 3px rgba(255, 236, 184, 0.9);
       filter: brightness(1.05);
     }
 
@@ -197,57 +192,52 @@
       transform: translateY(1px) scale(0.97);
       box-shadow:
         0 12px 20px rgba(0, 0, 0, 0.9),
-        0 0 0 3px rgba(25, 163, 51, 0.9);
+        0 0 0 3px rgba(255, 236, 184, 0.9);
     }
 
     .btn:focus-visible {
-      outline: 3px solid var(--grinch-yellow);
+      outline: 3px solid #ffe6a0;
       outline-offset: 4px;
     }
 
-    /* Падающие зелёные "шерстяные" локоны */
-    .fur-strand {
+    /* Пузырьки пива, всплывающие вверх */
+    .bubble {
       position: fixed;
-      top: -15vh;
-      width: 4px;
-      height: 22px;
-      border-radius: 999px;
-      background: linear-gradient(
-        180deg,
-        #b6ff6b 0%,
-        #54d259 35%,
-        #19a333 70%,
-        #0b4b1a 100%
-      );
+      bottom: -10vh;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 30%, #ffffff 0, #fff6d9 35%, #f4b024 80%, rgba(180, 90, 20, 0.8) 100%);
       box-shadow:
-        0 0 8px rgba(84, 210, 89, 0.8),
-        0 0 14px rgba(25, 163, 51, 0.9);
+        0 0 6px rgba(255, 255, 255, 0.8),
+        0 0 10px rgba(255, 230, 150, 0.9);
       opacity: 0;
       pointer-events: none;
       z-index: 1;
-      animation-name: fur-fall;
+      animation-name: bubble-rise;
       animation-timing-function: linear;
       animation-iteration-count: infinite;
     }
 
-    @keyframes fur-fall {
+    @keyframes bubble-rise {
       0% {
-        transform: translate3d(0, -15vh, 0) rotateZ(10deg);
+        transform: translate3d(0, 0, 0) scale(0.8);
         opacity: 0;
       }
       10% {
         opacity: 1;
       }
-      35% {
-        transform: translate3d(12px, 35vh, 0) rotateZ(-15deg);
-        opacity: 0.95;
+      50% {
+        transform: translate3d(-10px, -45vh, 0) scale(1.05);
+        opacity: 0.9;
       }
-      65% {
-        transform: translate3d(-18px, 80vh, 0) rotateZ(18deg);
-        opacity: 0.8;
+      90% {
+        transform: translate3d(8px, -95vh, 0) scale(0.9);
+        opacity: 0.3;
       }
       100% {
-        transform: translate3d(6px, 115vh, 0) rotateZ(-10deg);
+        transform: translate3d(6px, -110vh, 0) scale(0.7);
         opacity: 0;
       }
     }
@@ -266,14 +256,16 @@
       }
 
       .hello-text {
-        font-size: 1.6rem;
+        font-size: 1.7rem;
       }
     }
   </style>
 </head>
-<body class="bg-green">
+<body>
+  <div class="foam"></div>
+
   <div class="app">
-    <div class="subtitle">Appuie sur le bouton… si tu oses 💚</div>
+    <div class="subtitle">Appuie sur le bouton… santé 🍻</div>
 
     <!-- Блок с фото + "Bonjour Hawa" -->
     <div id="hello-block" class="hello-block">
@@ -291,21 +283,19 @@
 
     <!-- Кнопка -->
     <button id="bonjour-btn" class="btn">
-      <span class="icon">💚</span>
+      <span class="icon">🍺</span>
       <span class="btn-label">Bonjour Sasha</span>
-      <span class="icon">💚</span>
+      <span class="icon">🍺</span>
     </button>
   </div>
 
   <script>
-    // Твоя картинка с GitHub
+    // Новая картинка с GitHub
     const IMG_URL = "https://raw.githubusercontent.com/24tiy/bonjourhawa/main/camphoto_2022861571.JPG";
 
     const helloBlock = document.getElementById("hello-block");
     const helloImage = document.getElementById("hello-image");
     const btn = document.getElementById("bonjour-btn");
-    const app = document.querySelector(".app");
-    const bodyEl = document.body;
 
     helloImage.src = IMG_URL;
 
@@ -326,53 +316,37 @@
         helloBlock.classList.remove("visible");
         hideTimeoutId = null;
       }, 5000);
-
-      // Лёгкое дрожание "экрана"
-      app.classList.add("shake");
-      setTimeout(() => {
-        app.classList.remove("shake");
-      }, 450);
-
-      // Переключение фона: зелёный ↔ красный
-      if (bodyEl.classList.contains("bg-green")) {
-        bodyEl.classList.remove("bg-green");
-        bodyEl.classList.add("bg-red");
-      } else {
-        bodyEl.classList.remove("bg-red");
-        bodyEl.classList.add("bg-green");
-      }
     });
 
-    // Генерация падающих зелёных "шерстяных" локонов
-    const FUR_COUNT = 80;
+    // Генерация всплывающих пузырьков пива
+    const BUBBLE_COUNT = 80;
 
-    function createFur() {
-      for (let i = 0; i < FUR_COUNT; i++) {
-        const f = document.createElement("span");
-        f.classList.add("fur-strand");
+    function createBubbles() {
+      for (let i = 0; i < BUBBLE_COUNT; i++) {
+        const b = document.createElement("span");
+        b.classList.add("bubble");
 
         // Случайная горизонтальная позиция
-        f.style.left = Math.random() * 100 + "vw";
+        b.style.left = Math.random() * 100 + "vw";
 
         // Длительность анимации от 7 до 15 секунд
         const duration = 7 + Math.random() * 8;
-        f.style.animationDuration = duration + "s";
+        b.style.animationDuration = duration + "s";
 
         // Случайная задержка старта
         const delay = Math.random() * 10;
-        f.style.animationDelay = delay + "s";
+        b.style.animationDelay = delay + "s";
 
-        // Случайный размер/длина
-        const width = 3 + Math.random() * 3;
-        const height = 16 + Math.random() * 18;
-        f.style.width = width + "px";
-        f.style.height = height + "px";
+        // Случайный размер
+        const size = 4 + Math.random() * 10;
+        b.style.width = size + "px";
+        b.style.height = size + "px";
 
-        document.body.appendChild(f);
+        document.body.appendChild(b);
       }
     }
 
-    createFur();
+    createBubbles();
   </script>
 </body>
 </html>
