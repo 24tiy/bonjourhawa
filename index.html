@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Grinch Bonjour</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Немного мультяшного шрифта под гринч-стиль -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --grinch-green: #19a333;
+      --grinch-green-light: #54d259;
+      --grinch-green-dark: #0b4b1a;
+      --grinch-yellow: #ffe66d;
+      --card-bg: rgba(6, 32, 18, 0.95);
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Fredoka", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, #082616 0, #02130a 40%, #000000 100%),
+        radial-gradient(circle at bottom, #033018 0, #000000 70%);
+      color: #e6ffe9;
+    }
+
+    .app {
+      position: relative;
+      z-index: 2;
+      max-width: 480px;
+      width: 100%;
+      padding: 28px 22px 24px;
+      border-radius: 22px;
+      background: var(--card-bg);
+      box-shadow:
+        0 22px 40px rgba(0, 0, 0, 0.8),
+        0 0 0 2px rgba(25, 163, 51, 0.7);
+      text-align: center;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(84, 210, 89, 0.25);
+    }
+
+    .title {
+      font-family: "Mountains of Christmas", cursive;
+      font-size: 2.3rem;
+      color: var(--grinch-yellow);
+      text-shadow:
+        0 2px 0 #083015,
+        0 4px 8px rgba(0, 0, 0, 0.8);
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 0.98rem;
+      color: #9fd9a8;
+      margin-bottom: 20px;
+    }
+
+    /* Блок с фото и "Bonjour Hawa" */
+    .hello-block {
+      margin-bottom: 22px;
+      opacity: 0;
+      transform: translateY(-12px) scale(0.96);
+      pointer-events: none;
+      transition:
+        opacity 0.35s ease,
+        transform 0.35s cubic-bezier(0.16, 0.84, 0.44, 1);
+    }
+
+    .hello-block.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .hello-image-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .hello-image {
+      width: min(100%, 320px);
+      max-height: 260px;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 3px solid var(--grinch-green-light);
+      box-shadow:
+        0 14px 26px rgba(0, 0, 0, 0.85),
+        0 0 16px rgba(25, 163, 51, 0.8);
+    }
+
+    .hello-image-glow {
+      position: absolute;
+      inset: -6px;
+      border-radius: 22px;
+      background: conic-gradient(
+        from 180deg,
+        rgba(84, 210, 89, 0.8),
+        rgba(25, 163, 51, 0.1),
+        rgba(255, 230, 109, 0.7),
+        rgba(11, 75, 26, 0.9),
+        rgba(84, 210, 89, 0.8)
+      );
+      opacity: 0.4;
+      filter: blur(5px);
+      z-index: -1;
+    }
+
+    .hello-text {
+      font-size: 1.9rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--grinch-green-light);
+      text-shadow:
+        0 2px 0 #041b0d,
+        0 3px 6px rgba(0, 0, 0, 0.9);
+    }
+
+    /* Кнопка Гринча */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 999px;
+      padding: 16px 38px;
+      font-size: 1.3rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--grinch-green-light), var(--grinch-green-dark));
+      color: var(--white);
+      box-shadow:
+        0 18px 32px rgba(0, 0, 0, 0.9),
+        0 0 0 3px rgba(4, 27, 13, 1);
+      transition:
+        transform 0.12s ease,
+        box-shadow 0.12s ease,
+        filter 0.12s ease;
+    }
+
+    .btn span.icon {
+      font-size: 1.3rem;
+      transform: translateY(-1px);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow:
+        0 22px 38px rgba(0, 0, 0, 1),
+        0 0 0 3px rgba(25, 163, 51, 0.9);
+      filter: brightness(1.05);
+    }
+
+    .btn:active {
+      transform: translateY(1px) scale(0.97);
+      box-shadow:
+        0 12px 20px rgba(0, 0, 0, 0.9),
+        0 0 0 3px rgba(25, 163, 51, 0.9);
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid var(--grinch-yellow);
+      outline-offset: 4px;
+    }
+
+    /* Падающие зелёные шерстяные локоны Гринча */
+    .fur-strand {
+      position: fixed;
+      top: -15vh;
+      width: 4px;
+      height: 22px;
+      border-radius: 999px;
+      background: linear-gradient(
+        180deg,
+        #b6ff6b 0%,
+        #54d259 35%,
+        #19a333 70%,
+        #0b4b1a 100%
+      );
+      box-shadow:
+        0 0 8px rgba(84, 210, 89, 0.8),
+        0 0 14px rgba(25, 163, 51, 0.9);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1;
+      animation-name: fur-fall;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes fur-fall {
+      0% {
+        transform: translate3d(0, -15vh, 0) rotateZ(10deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      35% {
+        transform: translate3d(12px, 35vh, 0) rotateZ(-15deg);
+        opacity: 0.95;
+      }
+      65% {
+        transform: translate3d(-18px, 80vh, 0) rotateZ(18deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate3d(6px, 115vh, 0) rotateZ(-10deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .app {
+        margin: 16px;
+        padding: 24px 18px 20px;
+      }
+
+      .title {
+        font-size: 2rem;
+      }
+
+      .btn {
+        width: 100%;
+        padding-inline: 18px;
+        font-size: 1.1rem;
+        letter-spacing: 0.12em;
+      }
+
+      .hello-text {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="title">Grinch Bonjour</div>
+    <div class="subtitle">Appuie sur le bouton… si tu oses 💚</div>
+
+    <!-- Блок с фото + "Bonjour Hawa" -->
+    <div id="hello-block" class="hello-block">
+      <div class="hello-image-wrapper">
+        <div class="hello-image-glow"></div>
+        <img
+          id="hello-image"
+          class="hello-image"
+          src=""
+          alt="Bonjour Hawa"
+        />
+      </div>
+      <div class="hello-text">Bonjour Hawa</div>
+    </div>
+
+    <!-- Кнопка -->
+    <button id="bonjour-btn" class="btn">
+      <span class="icon">💚</span>
+      <span>Bonjour Sasha</span>
+      <span class="icon">💚</span>
+    </button>
+  </div>
+
+  <script>
+    // Я подставил твой реальный RAW-URL с GitHub
+    const IMG_URL = "https://raw.githubusercontent.com/24tiy/bonjourjade/bb4bad455cae2115cd54972c2b2cbf18a8deb836/camphoto_1401208270.JPG";
+
+    const helloBlock = document.getElementById("hello-block");
+    const helloImage = document.getElementById("hello-image");
+    const btn = document.getElementById("bonjour-btn");
+
+    helloImage.src = IMG_URL;
+
+    let hideTimeoutId = null;
+
+    btn.addEventListener("click", () => {
+      // Показать блок
+      helloBlock.classList.add("visible");
+
+      // Сбросить старый таймер, если он был
+      if (hideTimeoutId !== null) {
+        clearTimeout(hideTimeoutId);
+        hideTimeoutId = null;
+      }
+
+      // Спрятать через 5 секунд
+      hideTimeoutId = setTimeout(() => {
+        helloBlock.classList.remove("visible");
+        hideTimeoutId = null;
+      }, 5000);
+    });
+
+    // Генерация падающих зелёных "шерстяных" локонов
+    const FUR_COUNT = 80;
+
+    function createFur() {
+      for (let i = 0; i < FUR_COUNT; i++) {
+        const f = document.createElement("span");
+        f.classList.add("fur-strand");
+
+        // Случайная горизонтальная позиция
+        f.style.left = Math.random() * 100 + "vw";
+
+        // Длительность анимации от 7 до 15 секунд
+        const duration = 7 + Math.random() * 8;
+        f.style.animationDuration = duration + "s";
+
+        // Случайная задержка старта
+        const delay = Math.random() * 10;
+        f.style.animationDelay = delay + "s";
+
+        // Чуть случайный размер/длина
+        const width = 3 + Math.random() * 3;
+        const height = 16 + Math.random() * 18;
+        f.style.width = width + "px";
+        f.style.height = height + "px";
+
+        document.body.appendChild(f);
+      }
+    }
+
+    createFur();
+  </script>
+</body>
+</html>
